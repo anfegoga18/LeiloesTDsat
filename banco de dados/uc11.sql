@@ -20,17 +20,21 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `uc11`
 --
-
+CREATE DATABASE IF NOT EXISTS uc11;
 -- --------------------------------------------------------
-
+USE uc11;
 --
 -- Estrutura da tabela `produtos`
 --
+/*
+OBSERVAÇÃO:
+Mostrar a largura dos inteiros (bigint ou int ou outros int) vai sair no futuro (is deprecated), não precisa ser mais especificado 
+*/
 
 CREATE TABLE `produtos` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
   `nome` text DEFAULT NULL,
-  `valor` int(11) DEFAULT NULL,
+  `valor` int DEFAULT 11 NULL, 
   `status` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -62,7 +66,7 @@ ALTER TABLE `produtos`
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
