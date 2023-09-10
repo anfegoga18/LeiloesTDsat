@@ -33,8 +33,8 @@ Mostrar a largura dos inteiros (bigint ou int ou outros int) vai sair no futuro 
 
 CREATE TABLE `produtos` (
   `id` bigint UNSIGNED NOT NULL,
-  `nome` text DEFAULT NULL,
-  `valor` int DEFAULT 11 NULL, 
+  `nome` text NOT NULL,
+  `valor` int DEFAULT 11 NOT NULL, 
   `status` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -42,11 +42,14 @@ CREATE TABLE `produtos` (
 -- Extraindo dados da tabela `produtos`
 --
 
+/*
+Usado este INSERT inicialmente para ver se estava funcionando o banco de dados
 INSERT INTO `produtos` (`id`, `nome`, `valor`, `status`) VALUES
 (2, 'PS4', 1500, 'Vendido'),
 (3, 'Xbox 360', 800, 'Vendido'),
 (4, 'Iphone 12', 4800, 'Vendido'),
 (5, 'PS2', 400, 'A Venda');
+*/
 
 --
 -- Índices para tabelas despejadas
