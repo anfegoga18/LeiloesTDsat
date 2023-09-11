@@ -6,7 +6,6 @@
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
-//import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,10 +14,9 @@ import java.util.List;
 
 public class ProdutosDAO {
     
-    Connection con;
-    PreparedStatement ps;
-    ResultSet rs;
-    List<ProdutosDTO> listagem = new ArrayList<>();
+    private Connection con;
+    private PreparedStatement ps;
+    private ResultSet rs;
     private String sql;
     
     public int cadastrarProduto (ProdutosDTO produto){
@@ -49,13 +47,60 @@ public class ProdutosDAO {
             }
     }
     
-    public List<ProdutosDTO> listarProdutos(){
+    public boolean contarProdutos(){//Saber se a tabela no banco de dados tem registros
         
-        return listagem;
+        //Iniciando a conexão com o banco de dados
+        conectaDAO conectaDao = new conectaDAO();
+        con = conectaDao.abrirConexao();
+            try {
+                sql = "SELECT count(*) FROM produtos;";
+                ps = con.prepareStatement(sql);
+                ps.executeQuery();//OBS: para execuções que não sejam alterações, inserções ou eliminações deve ser usado executeQuerry ao invés do executeUpdate
+                System.out.println("Contagem de elementos realizada");
+                return true;
+            } catch (SQLException sqle) {
+                System.out.println("Houve um erro ao contar os registros na tabela --> " + sqle.getMessage());
+                return false;
+            } finally {
+                //Finalizando a conexao com o banco de dados
+                conectaDao.fecharConexao();
+            }
+        }
+    
+    public List<ProdutosDTO> listaDeProdutos(){
+        
+        List<ProdutosDTO> lista = new ArrayList<>();
+        
+        //Iniciando a conexão com o banco de dados
+        conectaDAO conectaDao = new conectaDAO();
+        con = conectaDao.abrirConexao();
+        
+        try{
+            ProdutosDTO produto = new ProdutosDTO();
+            sql = "SELECT * FROM produtos;";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            //Vai listar todos os produtos na tabela produtos
+                if (rs.next()) {//Carrega os dados se encontrou um filme
+                    produto.setId(rs.getInt("id"));
+                    produto.setNome(rs.getString("nome"));
+                    produto.setValor(rs.getInt("valor"));
+                    produto.setStatus(rs.getString("status"));
+                    
+                    lista.add(produto);
+                    return lista;
+                } else {
+                    System.out.println("Não foram achados produtos para listar");
+                    return null;
+                }
+            } catch (SQLException sqle){
+                System.out.println("Aconteceu um erro ao tentar consultar. " + sqle.getMessage());
+                return null;
+            } finally {
+                //Finalizando a conexao com o banco de dados
+                conectaDao.fecharConexao();
+            }
     }
     
-    
-    
-        
 }
 

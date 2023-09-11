@@ -1,7 +1,8 @@
 
-import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -10,11 +11,12 @@ import javax.swing.table.DefaultTableModel;
 public class listagemVIEW extends javax.swing.JFrame {
 
     cadastroVIEW cadastroView;
+    ProdutosDAO produtosDAO = new ProdutosDAO();
     
     public listagemVIEW(cadastroVIEW cadastroView) {
         initComponents();
         cadastroView = this.cadastroView;
-        listarProdutos();
+        listarProdutos(produtosDAO.listaDeProdutos());
     }
 
     /**
@@ -137,7 +139,7 @@ public class listagemVIEW extends javax.swing.JFrame {
         ProdutosDAO produtosdao = new ProdutosDAO();
         
         //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos();
+        listarProdutos(produtosDAO.listaDeProdutos());
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -164,25 +166,37 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator separadorInferior;
     // End of variables declaration//GEN-END:variables
 
-    private void listarProdutos(){
+    private void listarProdutos(List<ProdutosDTO> lista){
         try {
-            ProdutosDAO produtosdao = new ProdutosDAO();
-            
-            DefaultTableModel model = (DefaultTableModel) Tbl_listaProdutos.getModel();
-            model.setNumRows(0);
-            
-            List<ProdutosDTO> listagem = produtosdao.listarProdutos();
-            
-            for(int i = 0; i < listagem.size(); i++){
-                model.addRow(new Object[]{
-                    listagem.get(i).getId(),
-                    listagem.get(i).getNome(),
-                    listagem.get(i).getValor(),
-                    listagem.get(i).getStatus()
-                });
+            String [] columns = {"Id","Nome","Valor","Status"};
+        
+            ProdutosDAO produtosDAO = new ProdutosDAO();
+
+            if (produtosDAO.contarProdutos()){//Verificamos primeiro se a lista já tem elementos, pois se estiver vazia não precisa atualizar
+
+                DefaultTableModel tablaModelo = new DefaultTableModel(columns, 0); //A cada atualização é criado o modelo novamente
+
+                Tbl_listaProdutos.setRowSorter(new TableRowSorter(tablaModelo));// Para conseguir por ordem crescente ou decrescente na tabela
+
+                for(ProdutosDTO product : lista){
+                //Cria-se um vetor e adiciona-se os produtos para depois adicioná-los à tabela 
+                    Object [] vetorProdutos = new Object[] {
+                        product.getId(),
+                        product.getNome(),
+                        product.getValor(),
+                        product.getStatus()
+                    };
+                tablaModelo.addRow(vetorProdutos);
+                }
+                Tbl_listaProdutos.setModel(tablaModelo);
+            }else{//Se a lista de consultas está vazia
+                DefaultTableModel tablaModelo = new DefaultTableModel( columns, 0);
+                Tbl_listaProdutos.setModel(tablaModelo);
+                JOptionPane.showMessageDialog(null, "Não tem produtos para serem listados");
             }
         } catch (Exception e) {
         }
     
     }
+    
 }
