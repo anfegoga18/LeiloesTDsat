@@ -69,6 +69,9 @@ public class ProdutosDAO {
             }
         }
     
+    /*
+    * @return retorna uma lista de todos os produtos no banco de dados
+    */
     public List<ProdutosDTO> listaDeProdutos(){
         
         List<ProdutosDTO> lista = new ArrayList<>();
@@ -83,7 +86,7 @@ public class ProdutosDAO {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             //Vai listar todos os produtos na tabela produtos
-                if (rs.next()) {//Carrega os dados se encontrou um filme
+                if (rs.next()) {//Carrega os dados se encontrou um produto
                     produto.setId(rs.getInt("id"));
                     produto.setNome(rs.getString("nome"));
                     produto.setValor(rs.getInt("valor"));
@@ -104,6 +107,10 @@ public class ProdutosDAO {
             }
     }
     
+    
+    /**
+     *Recebe o JFrame do listagemVIEW e o id do produto que foi vendido
+     */
     public int venderProduto(JFrame view, int id){
     
     int status = 0;//Se for 1 significa inserido com sucesso, 0 erro na inserção
@@ -138,6 +145,46 @@ public class ProdutosDAO {
         }
         
         return status;
+    }
+    
+    /*
+    * @return retorna uma lista de dos produtos com status de VENDIDO no banco de dados
+    */
+    public List<ProdutosDTO> listarProdutosVendidos(){
+        
+        List<ProdutosDTO> lista = new ArrayList<>();
+        
+        //Iniciando a conexão com o banco de dados
+        conectaDAO conectaDao = new conectaDAO();
+        con = conectaDao.abrirConexao();
+        
+        try{
+            ProdutosDTO produto = new ProdutosDTO();
+            sql = "SELECT * FROM produtos"
+                    + "WHERE status = ? ;";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, "Vendido" );
+            rs = ps.executeQuery();
+            //Vai listar todos os produtos com status VENDIDO na tabela produtos
+                if (rs.next()) {//Carrega os dados se encontrou um produto
+                    produto.setId(rs.getInt("id"));
+                    produto.setNome(rs.getString("nome"));
+                    produto.setValor(rs.getInt("valor"));
+                    produto.setStatus(rs.getString("status"));
+                    
+                    lista.add(produto);
+                    return lista;
+                } else {
+                    System.out.println("Não foram achados produtos vendidos para listar");
+                    return null;
+                }
+            } catch (SQLException sqle){
+                System.out.println("Aconteceu um erro ao tentar consultar. " + sqle.getMessage());
+                return null;
+            } finally {
+                //Finalizando a conexao com o banco de dados
+                conectaDao.fecharConexao();
+            }
     }
     
 }

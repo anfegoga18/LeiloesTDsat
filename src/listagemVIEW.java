@@ -147,9 +147,6 @@ public class listagemVIEW extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Deve inserir um identificador (número positivo) no campo Id");
         }
         
-
-            
-        
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
