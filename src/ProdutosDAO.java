@@ -1,7 +1,7 @@
 
 /**
  *
- * @author Adm
+ * @author Andrés Felipe González García
  */
 
 import java.sql.PreparedStatement;
@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 
 public class ProdutosDAO {
@@ -100,6 +102,42 @@ public class ProdutosDAO {
                 //Finalizando a conexao com o banco de dados
                 conectaDao.fecharConexao();
             }
+    }
+    
+    public int venderProduto(JFrame view, int id){
+    
+    int status = 0;//Se for 1 significa inserido com sucesso, 0 erro na inserção
+    
+        if(contarProdutos()){
+        
+        //Iniciando a conexão com o banco de dados
+        conectaDAO conectaDao = new conectaDAO();
+        con = conectaDao.abrirConexao();
+        
+            try {
+                sql = "UPDATE produtos "
+                        + "SET status = ? "
+                        + "WHERE id = ? ;";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, "Vendido" );
+                ps.setString(2, String.valueOf(id));
+                status = ps.executeUpdate(); 
+                System.out.println("Venda atualizada com sucesso!");
+                return status;//Retorna 1 se for bem sucedido
+                
+            } catch (SQLException sqle) {
+                System.out.println("Erro ao atualizar os dados " + sqle.getMessage());
+                return status;
+            } finally {
+                //Finalizando a conexao com o banco de dados
+                conectaDao.fecharConexao();
+            }
+        
+        } else {
+            JOptionPane.showMessageDialog(view, "Não há produtos para serem vendidos");
+        }
+        
+        return status;
     }
     
 }

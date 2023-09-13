@@ -134,12 +134,22 @@ public class listagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String id = id_produto_venda.getText();
         
-        ProdutosDAO produtosdao = new ProdutosDAO();
+        if (validaId()){
+            String id = id_produto_venda.getText().trim();
+            ProdutosDAO produtosdao = new ProdutosDAO();
         
-        //produtosdao.venderProduto(Integer.parseInt(id));
-        listarProdutos(produtosDAO.listaDeProdutos());
+            produtosdao.venderProduto(this,Integer.parseInt(id));
+            listarProdutos(produtosDAO.listaDeProdutos());
+            JOptionPane.showMessageDialog(this, "Status atualizado com sucesso");
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Deve inserir um identificador (número positivo) no campo Id");
+        }
+        
+
+            
+        
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -197,6 +207,34 @@ public class listagemVIEW extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     
+    }
+    
+    public Object obterId(){
+        /*
+        Obtendo a fila selecionada na tabela, se o resultado for -1 é porque nada foi selecionado
+        */
+        int fila = Tbl_listaProdutos.getSelectedRow(); 
+        Object Id = Tbl_listaProdutos.getValueAt(fila, 0);
+        
+        return Id;
+    }
+    
+    public boolean idVazio(){
+        return id_produto_venda.getText().trim().isEmpty();
+    }
+    
+    public boolean validaId(){//Validando a entrada do Id para vender produto
+    
+        boolean valido = false;
+        
+        if (!idVazio()) {
+            String entradaId = id_produto_venda.getText().trim();
+            boolean validaId = entradaId.matches("[0-9]{1,3}");
+            if (validaId == true) {
+                valido = true;
+            }
+        }
+        return valido;
     }
     
 }

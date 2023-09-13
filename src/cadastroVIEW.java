@@ -149,8 +149,6 @@ public class cadastroVIEW extends javax.swing.JFrame {
             produto.setValor(Integer.valueOf(valor));
 //            produto.setStatus(status);
 
-            
-
             //Passando o produto inserio no banco de dados
             ProdutosDAO produtodao = new ProdutosDAO();
             
@@ -159,7 +157,6 @@ public class cadastroVIEW extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Falha ao cadastrar o produto, contate o administrador");
             }
-            
             
         } else {
             JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos");
