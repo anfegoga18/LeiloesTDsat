@@ -81,23 +81,23 @@ public class ProdutosDAO {
         con = conectaDao.abrirConexao();
         
         try{
-            ProdutosDTO produto = new ProdutosDTO();
+            
             sql = "SELECT * FROM produtos;";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             //Vai listar todos os produtos na tabela produtos
-                if (rs.next()) {//Carrega os dados se encontrou um produto
+                while (rs.next()) {//Carrega os dados se encontrou um produto
+                    ProdutosDTO produto = new ProdutosDTO();
                     produto.setId(rs.getInt("id"));
                     produto.setNome(rs.getString("nome"));
                     produto.setValor(rs.getInt("valor"));
                     produto.setStatus(rs.getString("status"));
                     
                     lista.add(produto);
-                    return lista;
-                } else {
-                    System.out.println("Não foram achados produtos para listar");
-                    return null;
-                }
+                    
+                } 
+            return lista;
+            
             } catch (SQLException sqle){
                 System.out.println("Aconteceu um erro ao tentar consultar. " + sqle.getMessage());
                 return null;
@@ -105,6 +105,7 @@ public class ProdutosDAO {
                 //Finalizando a conexao com o banco de dados
                 conectaDao.fecharConexao();
             }
+        
     }
     
     
@@ -159,25 +160,25 @@ public class ProdutosDAO {
         con = conectaDao.abrirConexao();
         
         try{
-            ProdutosDTO produto = new ProdutosDTO();
-            sql = "SELECT * FROM produtos"
+            
+            sql = "SELECT * FROM produtos "
                     + "WHERE status = ? ;";
             ps = con.prepareStatement(sql);
             ps.setString(1, "Vendido" );
             rs = ps.executeQuery();
             //Vai listar todos os produtos com status VENDIDO na tabela produtos
-                if (rs.next()) {//Carrega os dados se encontrou um produto
+                while (rs.next()) {//Carrega os dados se encontrou um produto
+                    ProdutosDTO produto = new ProdutosDTO();
                     produto.setId(rs.getInt("id"));
                     produto.setNome(rs.getString("nome"));
                     produto.setValor(rs.getInt("valor"));
                     produto.setStatus(rs.getString("status"));
                     
                     lista.add(produto);
-                    return lista;
-                } else {
-                    System.out.println("Não foram achados produtos vendidos para listar");
-                    return null;
+//                    System.out.println("Produto adicionado");
                 }
+            return lista;
+            
             } catch (SQLException sqle){
                 System.out.println("Aconteceu um erro ao tentar consultar. " + sqle.getMessage());
                 return null;
@@ -185,6 +186,7 @@ public class ProdutosDAO {
                 //Finalizando a conexao com o banco de dados
                 conectaDao.fecharConexao();
             }
+        
     }
     
 }
